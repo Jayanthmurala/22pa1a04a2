@@ -24,60 +24,66 @@ A production-ready URL shortening microservice built with Node.js, Express, and 
 ## 🛠️ Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd url-shortener-microservice
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` file:
+
    ```env
    # Server Configuration
    PORT=3000
    HOST=0.0.0.0
    NODE_ENV=development
-   
+
    # MongoDB Configuration
    MONGODB_URI=mongodb://localhost:27017/url_shortener
-   
+
    # JWT Configuration
    JWT_SECRET=your-super-secret-jwt-key-change-in-production
    JWT_EXPIRES_IN=24h
-   
+
    # URL Shortener Configuration
    BASE_URL=http://localhost:3000
-   
+
    # Logging
    LOG_LEVEL=info
    LOG_FORMAT=json
    ```
 
 4. **Start MongoDB server**
+
    ```bash
    # On macOS with Homebrew
    brew services start mongodb-community
-   
+
    # On Ubuntu/Debian
    sudo systemctl start mongod
-   
+
    # Using Docker
    docker run -d -p 27017:27017 --name mongodb mongo:latest
    ```
 
 5. **Start the application**
+
    ```bash
    # Development mode
    npm run dev
-   
+
    # Production mode
    npm start
    ```
@@ -85,11 +91,13 @@ A production-ready URL shortening microservice built with Node.js, Express, and 
 ## 🧪 Testing
 
 Run the test suite:
+
 ```bash
 npm test
 ```
 
 Run tests with coverage:
+
 ```bash
 npm run test:coverage
 ```
@@ -97,6 +105,7 @@ npm run test:coverage
 ## 📚 API Documentation
 
 ### Base URL
+
 ```
 http://localhost:3000
 ```
@@ -104,13 +113,15 @@ http://localhost:3000
 ### Authentication Endpoints
 
 #### 1. Register User
+
 **POST** `/auth/register`
 
 **Request Body:**
+
 ```json
 {
-  "email": "ramkrishna@abc.edu",
-  "name": "Ram Krishna",
+  "email": "jayanthmurala1@gamil.com",
+  "name": "Jayanthmurala",
   "mobileNo": "9999999999",
   "githubUsername": "github",
   "rollNo": "aalbb",
@@ -119,12 +130,13 @@ http://localhost:3000
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
   "data": {
-    "email": "ramkrishna@abc.edu",
-    "name": "Ram Krishna",
+    "email": "jayanthmurala@gamil.com",
+    "name": "jayanthmurala",
     "rollNo": "aalbb",
     "accessCode": "xgAsNC",
     "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da",
@@ -135,13 +147,15 @@ http://localhost:3000
 ```
 
 #### 2. Authenticate User
+
 **POST** `/auth/auth`
 
 **Request Body:**
+
 ```json
 {
-  "email": "ramkrishna@abc.edu",
-  "name": "Ram Krishna",
+  "email": "jayanthmurala@gamil.com",
+  "name": "jayanthmurala",
   "rollNo": "aalbb",
   "accessCode": "xgAsNC",
   "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da",
@@ -150,6 +164,7 @@ http://localhost:3000
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -162,22 +177,25 @@ http://localhost:3000
 ```
 
 #### 3. Verify Token
+
 **GET** `/auth/verify`
 
 **Headers:**
+
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
   "data": {
     "valid": true,
     "user": {
-      "email": "ramkrishna@abc.edu",
-      "name": "Ram Krishna",
+      "email": "jayanthmurala@gamil.com",
+      "name": "jayanthmurala",
       "rollNo": "aalbb",
       "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da"
     }
@@ -186,20 +204,23 @@ Authorization: Bearer <your-jwt-token>
 ```
 
 #### 4. Get User Profile
+
 **GET** `/auth/profile`
 
 **Headers:**
+
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
   "data": {
-    "email": "ramkrishna@abc.edu",
-    "name": "Ram Krishna",
+    "email": "jayanthmurala@gamil.com",
+    "name": "jayanthmurala",
     "mobileNo": "9999999999",
     "githubUsername": "github",
     "rollNo": "aalbb",
@@ -215,14 +236,17 @@ Authorization: Bearer <your-jwt-token>
 ### URL Shortening Endpoints (Protected)
 
 #### 1. Create Shortened URL
+
 **POST** `/shorturls`
 
 **Headers:**
+
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
 **Request Body:**
+
 ```json
 {
   "url": "https://example.com/very-long-url",
@@ -232,6 +256,7 @@ Authorization: Bearer <your-jwt-token>
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -243,14 +268,17 @@ Authorization: Bearer <your-jwt-token>
 ```
 
 #### 2. Get URL Statistics
+
 **GET** `/shorturls/:shortcode`
 
 **Headers:**
+
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -278,14 +306,17 @@ Authorization: Bearer <your-jwt-token>
 ```
 
 #### 3. Delete Shortened URL
+
 **DELETE** `/shorturls/:shortcode`
 
 **Headers:**
+
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -296,14 +327,17 @@ Authorization: Bearer <your-jwt-token>
 ### Public Endpoints
 
 #### 1. Redirect to Original URL
+
 **GET** `/:shortcode`
 
 **Response:** HTTP 302 redirect to the original URL
 
 #### 2. Health Check
+
 **GET** `/health`
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -321,6 +355,7 @@ Authorization: Bearer <your-jwt-token>
 ```
 
 #### 3. API Documentation
+
 **GET** `/docs`
 
 Returns comprehensive API documentation with examples.
@@ -329,17 +364,17 @@ Returns comprehensive API documentation with examples.
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | 3000 | Server port |
-| `HOST` | 0.0.0.0 | Server host |
-| `NODE_ENV` | development | Environment mode |
-| `MONGODB_URI` | mongodb://localhost:27017/url_shortener | MongoDB connection string |
-| `JWT_SECRET` | your-super-secret-jwt-key-change-in-production | JWT secret key |
-| `JWT_EXPIRES_IN` | 24h | JWT token expiration |
-| `BASE_URL` | http://localhost:3000 | Base URL for shortlinks |
-| `LOG_LEVEL` | info | Logging level |
-| `LOG_FORMAT` | json | Logging format |
+| Variable         | Default                                        | Description               |
+| ---------------- | ---------------------------------------------- | ------------------------- |
+| `PORT`           | 3000                                           | Server port               |
+| `HOST`           | 0.0.0.0                                        | Server host               |
+| `NODE_ENV`       | development                                    | Environment mode          |
+| `MONGODB_URI`    | mongodb://localhost:27017/url_shortener        | MongoDB connection string |
+| `JWT_SECRET`     | your-super-secret-jwt-key-change-in-production | JWT secret key            |
+| `JWT_EXPIRES_IN` | 24h                                            | JWT token expiration      |
+| `BASE_URL`       | http://localhost:3000                          | Base URL for shortlinks   |
+| `LOG_LEVEL`      | info                                           | Logging level             |
+| `LOG_FORMAT`     | json                                           | Logging format            |
 
 ### Rate Limiting
 
@@ -350,6 +385,7 @@ Returns comprehensive API documentation with examples.
 ## 🏗️ Architecture
 
 ### Project Structure
+
 ```
 src/
 ├── config/
@@ -386,35 +422,36 @@ tests/
 ### Database Schema (MongoDB)
 
 #### User Collection
+
 ```javascript
 {
   _id: ObjectId,
-  email: String,           // Unique, indexed
-  name: String,            // Required
-  mobileNo: String,        // Required
-  githubUsername: String,  // Required
-  rollNo: String,          // Unique, required
-  accessCode: String,      // Required
-  clientID: String,        // Unique, required
-  clientSecret: String,    // Hashed, required
-  isRegistered: Boolean,   // Default: false
-  lastLogin: Date,         // Optional
-  createdAt: Date,         // Auto-generated
-  updatedAt: Date          // Auto-generated
-}
+  email: String,
+  name: String,
+  mobileNo: String,
+  githubUsername: String,
+  rollNo: String,
+  accessCode: String,
+  clientID: String,
+  clientSecret: String,
+  isRegistered: Boolean,
+  lastLogin: Date,
+  createdAt: Date,
+  updatedAt: Date
 ```
 
 #### URL Collection
+
 ```javascript
 {
   _id: ObjectId,
-  shortcode: String,           // Unique, indexed
-  originalUrl: String,         // Required
-  createdAt: Date,            // Auto-generated
-  expiresAt: Date,            // Required, indexed
-  isActive: Boolean,          // Default: true, indexed
-  clickCount: Number,         // Default: 0
-  clickEvents: [              // Array of click events
+  shortcode: String,
+  originalUrl: String,
+  createdAt: Date,
+  expiresAt: Date,
+  isActive: Boolean,
+  clickCount: Number,
+  clickEvents: [
     {
       timestamp: Date,
       referrer: String,
@@ -427,12 +464,13 @@ tests/
       userAgent: String
     }
   ],
-  createdBy: String,          // Default: 'system'
-  metadata: Map               // Additional data
+  createdBy: String,
+  metadata: Map
 }
 ```
 
 #### Indexes
+
 - `email`: Unique index
 - `rollNo`: Unique index
 - `clientID`: Unique index
@@ -455,6 +493,7 @@ tests/
 ## 📊 Monitoring & Logging
 
 ### Custom Logging
+
 - Structured JSON logging in production
 - Request/response logging
 - Error tracking with stack traces
@@ -462,6 +501,7 @@ tests/
 - Authentication attempt logging
 
 ### Health Checks
+
 - MongoDB connection status
 - Service availability
 - Response time monitoring
@@ -469,6 +509,7 @@ tests/
 ## 🚀 Deployment
 
 ### Docker Deployment
+
 ```dockerfile
 FROM node:18-alpine
 
@@ -485,6 +526,7 @@ CMD ["npm", "start"]
 ```
 
 ### Environment Variables for Production
+
 ```env
 NODE_ENV=production
 PORT=3000
@@ -493,45 +535,3 @@ JWT_SECRET=your-super-secret-jwt-key-change-in-production
 BASE_URL=https://your-domain.com
 LOG_LEVEL=warn
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite
-6. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Support
-
-For support and questions:
-- Create an issue in the repository
-- Check the `/docs` endpoint for API documentation
-- Review the test suite for usage examples
-
-## 🔄 Changelog
-
-### v2.1.0
-- Added JWT-based authentication system
-- User registration and login functionality
-- Protected URL shortening endpoints
-- Client credential management
-- Token verification and user profiles
-
-### v2.0.0
-- Migrated from Redis to MongoDB
-- Enhanced data persistence and scalability
-- Improved indexing and query performance
-- Added automatic cleanup of expired URLs
-
-### v1.0.0
-- Initial release with Redis backend
-- URL shortening with custom shortcodes
-- Analytics and geolocation tracking
-- Comprehensive error handling
-- Production-ready architecture 

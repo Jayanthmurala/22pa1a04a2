@@ -1,13 +1,5 @@
-/**
- * Error Handling Middleware
- * Provides centralized error handling for the application
- */
+const { logger } = require("./logger");
 
-const { logger } = require('./logger');
-
-/**
- * Custom error class for application errors
- */
 class AppError extends Error {
   constructor(message, statusCode = 500, details = null) {
     super(message);
@@ -19,40 +11,32 @@ class AppError extends Error {
   }
 }
 
-/**
- * 404 Not Found handler
- */
 const notFoundHandler = (req, res, next) => {
   const error = new AppError(`Route ${req.originalUrl} not found`, 404);
   next(error);
 };
 
-/**
- * Global error handler
- */
 const globalErrorHandler = (err, req, res, next) => {
   let error = err;
 
-  // If it's not our custom error, create one
   if (!error.isOperational) {
-    error = new AppError(error.message || 'Internal server error', 500);
+    error = new AppError(error.message || "Internal server error", 500);
   }
 
-  // Log the error
-  logger.error('Unhandled error', {
+  logger.error("Unhandled error", {
     error: error.message,
     stack: error.stack,
     url: req.originalUrl,
     method: req.method,
     ip: req.ip,
-    userAgent: req.get('User-Agent')
+    userAgent: req.get("User-Agent"),
   });
 
   // Send error response
   const response = {
     success: false,
     error: error.message,
-    statusCode: error.statusCode
+    statusCode: error.statusCode,
   };
 
   // Add details if available
@@ -61,7 +45,7 @@ const globalErrorHandler = (err, req, res, next) => {
   }
 
   // Add stack trace in development
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     response.stack = error.stack;
   }
 
@@ -81,49 +65,43 @@ const asyncHandler = (fn) => {
  * Validation error handler
  */
 const validationErrorHandler = (err, req, res, next) => {
-  if (err.name === 'ValidationError') {
-    const error = new AppError('Validation failed', 400, err.details);
+  if (err.name === "ValidationError") {
+    const error = new AppError("Validation failed", 400, err.details);
     return next(error);
   }
   next(err);
 };
 
-/**
- * Joi validation error handler
- */
 const joiErrorHandler = (err, req, res, next) => {
   if (err.isJoi) {
-    const error = new AppError('Validation failed', 400, err.details);
+    const error = new AppError("Validation failed", 400, err.details);
     return next(error);
   }
   next(err);
 };
 
-/**
- * MongoDB error handler
- */
 const mongoErrorHandler = (err, req, res, next) => {
   // Handle MongoDB connection errors
-  if (err.name === 'MongoNetworkError' || err.name === 'MongoTimeoutError') {
-    const error = new AppError('Database connection failed', 503);
+  if (err.name === "MongoNetworkError" || err.name === "MongoTimeoutError") {
+    const error = new AppError("Database connection failed", 503);
     return next(error);
   }
 
   // Handle MongoDB duplicate key errors
   if (err.code === 11000) {
-    const error = new AppError('Duplicate key error', 409);
+    const error = new AppError("Duplicate key error", 409);
     return next(error);
   }
 
   // Handle MongoDB validation errors
-  if (err.name === 'ValidationError') {
-    const error = new AppError('Data validation failed', 400, err.message);
+  if (err.name === "ValidationError") {
+    const error = new AppError("Data validation failed", 400, err.message);
     return next(error);
   }
 
   // Handle MongoDB cast errors (invalid ObjectId, etc.)
-  if (err.name === 'CastError') {
-    const error = new AppError('Invalid data format', 400);
+  if (err.name === "CastError") {
+    const error = new AppError("Invalid data format", 400);
     return next(error);
   }
 
@@ -137,5 +115,5 @@ module.exports = {
   asyncHandler,
   validationErrorHandler,
   joiErrorHandler,
-  mongoErrorHandler
-}; 
+  mongoErrorHandler,
+};

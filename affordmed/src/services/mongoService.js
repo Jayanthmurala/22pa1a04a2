@@ -1,65 +1,57 @@
-const mongoose = require('mongoose');
-const config = require('../config/config');
-const logger = require('../middleware/logger');
+const mongoose = require("mongoose");
+const config = require("../config/config");
+const logger = require("../middleware/logger");
 
-/**
- * MongoDB Service
- * Handles all database operations using Mongoose
- */
 class MongoService {
   constructor() {
     this.isConnected = false;
     this.connection = null;
   }
 
-  /**
-   * Connect to MongoDB
-   */
   async connect() {
     try {
       if (this.isConnected) {
         return;
       }
 
-      this.connection = await mongoose.connect(config.mongodb.uri, config.mongodb.options);
+      this.connection = await mongoose.connect(
+        config.mongodb.uri,
+        config.mongodb.options
+      );
       this.isConnected = true;
 
-      logger.info('MongoDB connected successfully');
+      logger.info("MongoDB connected successfully");
 
       // Handle connection events
-      mongoose.connection.on('error', (error) => {
-        logger.error('MongoDB connection error:', error);
+      mongoose.connection.on("error", (error) => {
+        logger.error("MongoDB connection error:", error);
         this.isConnected = false;
       });
 
-      mongoose.connection.on('disconnected', () => {
-        logger.warn('MongoDB disconnected');
+      mongoose.connection.on("disconnected", () => {
+        logger.warn("MongoDB disconnected");
         this.isConnected = false;
       });
 
-      mongoose.connection.on('reconnected', () => {
-        logger.info('MongoDB reconnected');
+      mongoose.connection.on("reconnected", () => {
+        logger.info("MongoDB reconnected");
         this.isConnected = true;
       });
-
     } catch (error) {
-      logger.error('Failed to connect to MongoDB:', error);
+      logger.error("Failed to connect to MongoDB:", error);
       throw error;
     }
   }
 
-  /**
-   * Disconnect from MongoDB
-   */
   async disconnect() {
     try {
       if (this.connection) {
         await mongoose.disconnect();
         this.isConnected = false;
-        logger.info('MongoDB disconnected successfully');
+        logger.info("MongoDB disconnected successfully");
       }
     } catch (error) {
-      logger.error('Error disconnecting from MongoDB:', error);
+      logger.error("Error disconnecting from MongoDB:", error);
       throw error;
     }
   }
@@ -70,7 +62,7 @@ class MongoService {
   getConnectionStatus() {
     return {
       isConnected: this.isConnected,
-      readyState: mongoose.connection.readyState
+      readyState: mongoose.connection.readyState,
     };
   }
 
@@ -80,15 +72,15 @@ class MongoService {
   async healthCheck() {
     try {
       if (!this.isConnected) {
-        return { status: 'disconnected', message: 'MongoDB not connected' };
+        return { status: "disconnected", message: "MongoDB not connected" };
       }
 
       // Ping the database
       await mongoose.connection.db.admin().ping();
-      return { status: 'healthy', message: 'MongoDB is responding' };
+      return { status: "healthy", message: "MongoDB is responding" };
     } catch (error) {
-      logger.error('MongoDB health check failed:', error);
-      return { status: 'unhealthy', message: error.message };
+      logger.error("MongoDB health check failed:", error);
+      return { status: "unhealthy", message: error.message };
     }
   }
 
@@ -108,4 +100,4 @@ class MongoService {
 }
 
 // Export singleton instance
-module.exports = new MongoService(); 
+module.exports = new MongoService();

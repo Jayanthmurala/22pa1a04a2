@@ -1,11 +1,7 @@
-const axios = require('axios');
-const config = require('../config/config');
-const { logger } = require('../middleware/logger');
+const axios = require("axios");
+const config = require("../config/config");
+const { logger } = require("../middleware/logger");
 
-/**
- * Geo IP Service
- * Handles geolocation lookups for IP addresses
- */
 class GeoIpService {
   constructor() {
     this.serviceUrl = config.geoIp.serviceUrl;
@@ -17,15 +13,16 @@ class GeoIpService {
    */
   getClientIp(req) {
     // Check various headers for real IP
-    const ip = req.headers['x-forwarded-for'] ||
-               req.headers['x-real-ip'] ||
-               req.connection.remoteAddress ||
-               req.socket.remoteAddress ||
-               req.ip ||
-               '127.0.0.1';
+    const ip =
+      req.headers["x-forwarded-for"] ||
+      req.headers["x-real-ip"] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      req.ip ||
+      "127.0.0.1";
 
     // Handle IPv6 format
-    return ip.replace(/^::ffff:/, '');
+    return ip.replace(/^::ffff:/, "");
   }
 
   /**
@@ -39,10 +36,10 @@ class GeoIpService {
       /^127\./,
       /^::1$/,
       /^fc00:/,
-      /^fe80:/
+      /^fe80:/,
     ];
 
-    return privateRanges.some(range => range.test(ip));
+    return privateRanges.some((range) => range.test(ip));
   }
 
   /**
@@ -52,60 +49,60 @@ class GeoIpService {
     try {
       // Skip private/localhost IPs
       if (this.isPrivateIp(ip)) {
-        logger.debug('Skipping geolocation for private IP', { ip });
+        logger.debug("Skipping geolocation for private IP", { ip });
         return {
-          country: 'Unknown',
-          region: 'Unknown',
-          city: 'Unknown',
-          ip: ip
+          country: "Unknown",
+          region: "Unknown",
+          city: "Unknown",
+          ip: ip,
         };
       }
 
       // Make request to geolocation service
       const response = await axios.get(`${this.serviceUrl}/${ip}`, {
-        timeout: this.timeout
+        timeout: this.timeout,
       });
 
-      if (response.data && response.data.status === 'success') {
+      if (response.data && response.data.status === "success") {
         const { country, regionName, city } = response.data;
-        
-        logger.debug('Geolocation data retrieved', { 
-          ip, 
-          country, 
-          region: regionName, 
-          city 
+
+        logger.debug("Geolocation data retrieved", {
+          ip,
+          country,
+          region: regionName,
+          city,
         });
 
         return {
-          country: country || 'Unknown',
-          region: regionName || 'Unknown',
-          city: city || 'Unknown',
-          ip: ip
+          country: country || "Unknown",
+          region: regionName || "Unknown",
+          city: city || "Unknown",
+          ip: ip,
         };
       } else {
-        logger.warn('Geolocation service returned error', { 
-          ip, 
-          response: response.data 
+        logger.warn("Geolocation service returned error", {
+          ip,
+          response: response.data,
         });
-        
+
         return {
-          country: 'Unknown',
-          region: 'Unknown',
-          city: 'Unknown',
-          ip: ip
+          country: "Unknown",
+          region: "Unknown",
+          city: "Unknown",
+          ip: ip,
         };
       }
     } catch (error) {
-      logger.error('Failed to get geolocation data', { 
-        ip, 
-        error: error.message 
+      logger.error("Failed to get geolocation data", {
+        ip,
+        error: error.message,
       });
-      
+
       return {
-        country: 'Unknown',
-        region: 'Unknown',
-        city: 'Unknown',
-        ip: ip
+        country: "Unknown",
+        region: "Unknown",
+        city: "Unknown",
+        ip: ip,
       };
     }
   }
@@ -117,20 +114,20 @@ class GeoIpService {
     try {
       return await this.getLocation(ip);
     } catch (error) {
-      logger.error('Geolocation failed, using fallback', { 
-        ip, 
-        error: error.message 
+      logger.error("Geolocation failed, using fallback", {
+        ip,
+        error: error.message,
       });
-      
+
       return {
-        country: 'Unknown',
-        region: 'Unknown',
-        city: 'Unknown',
-        ip: ip
+        country: "Unknown",
+        region: "Unknown",
+        city: "Unknown",
+        ip: ip,
       };
     }
   }
 }
 
 // Export singleton instance
-module.exports = new GeoIpService(); 
+module.exports = new GeoIpService();

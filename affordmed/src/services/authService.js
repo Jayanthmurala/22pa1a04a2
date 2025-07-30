@@ -1,12 +1,14 @@
-/**
- * Authentication Service
- * Handles user registration and authentication
- */
-
-const User = require('../models/User');
-const { generateToken, generateClientCredentials, getTokenExpiration } = require('../utils/authUtils');
-const { validateRegistration, validateAuthentication } = require('../utils/authValidators');
-const { logger } = require('../middleware/logger');
+const User = require("../models/User");
+const {
+  generateToken,
+  generateClientCredentials,
+  getTokenExpiration,
+} = require("../utils/authUtils");
+const {
+  validateRegistration,
+  validateAuthentication,
+} = require("../utils/authValidators");
+const { logger } = require("../middleware/logger");
 
 class AuthService {
   /**
@@ -19,20 +21,22 @@ class AuthService {
       if (!validation.isValid) {
         return {
           success: false,
-          error: 'Validation failed',
-          details: validation.errors
+          error: "Validation failed",
+          details: validation.errors,
         };
       }
 
-      const { email, name, mobileNo, githubUsername, rollNo, accessCode } = validation.data;
+      const { email, name, mobileNo, githubUsername, rollNo, accessCode } =
+        validation.data;
 
       // Check if user is already registered
       const existingUser = await User.isUserRegistered(email);
       if (existingUser) {
         return {
           success: false,
-          error: 'You can register only once. Do not forget to save your clientID and retrieve them again.',
-          statusCode: 409
+          error:
+            "You can register only once. Do not forget to save your clientID and retrieve them again.",
+          statusCode: 409,
         };
       }
 
@@ -41,8 +45,8 @@ class AuthService {
       if (existingRollNo) {
         return {
           success: false,
-          error: 'Roll number already exists',
-          statusCode: 409
+          error: "Roll number already exists",
+          statusCode: 409,
         };
       }
 
@@ -59,7 +63,7 @@ class AuthService {
         accessCode,
         clientID,
         clientSecret,
-        isRegistered: true
+        isRegistered: true,
       });
 
       // Save to database
@@ -72,37 +76,38 @@ class AuthService {
         rollNo: user.rollNo,
         accessCode: user.accessCode,
         clientID: user.clientID,
-        clientSecret: clientSecret // Return the original secret, not the hashed one
+        clientSecret: clientSecret, // Return the original secret, not the hashed one
       };
 
-      logger.info('User registered successfully', {
+      logger.info("User registered successfully", {
         email: user.email,
         rollNo: user.rollNo,
-        clientID: user.clientID
+        clientID: user.clientID,
       });
 
       return {
         success: true,
         data: response,
-        message: 'You can register only once. Do not forget to save your clientID and retrieve them again.'
+        message:
+          "You can register only once. Do not forget to save your clientID and retrieve them again.",
       };
     } catch (error) {
-      logger.error('Failed to register user', { error: error.message, data });
-      
+      logger.error("Failed to register user", { error: error.message, data });
+
       // Handle duplicate key error
       if (error.code === 11000) {
         const field = Object.keys(error.keyPattern)[0];
         return {
           success: false,
           error: `${field} already exists`,
-          statusCode: 409
+          statusCode: 409,
         };
       }
 
       return {
         success: false,
-        error: 'Failed to register user',
-        details: error.message
+        error: "Failed to register user",
+        details: error.message,
       };
     }
   }
@@ -117,29 +122,35 @@ class AuthService {
       if (!validation.isValid) {
         return {
           success: false,
-          error: 'Validation failed',
-          details: validation.errors
+          error: "Validation failed",
+          details: validation.errors,
         };
       }
 
-      const { email, name, rollNo, accessCode, clientID, clientSecret } = validation.data;
+      const { email, name, rollNo, accessCode, clientID, clientSecret } =
+        validation.data;
 
       // Find user by client ID
       const user = await User.findByClientID(clientID);
       if (!user) {
         return {
           success: false,
-          error: 'Invalid credentials',
-          statusCode: 401
+          error: "Invalid credentials",
+          statusCode: 401,
         };
       }
 
       // Verify user details
-      if (user.email !== email || user.name !== name || user.rollNo !== rollNo || user.accessCode !== accessCode) {
+      if (
+        user.email !== email ||
+        user.name !== name ||
+        user.rollNo !== rollNo ||
+        user.accessCode !== accessCode
+      ) {
         return {
           success: false,
-          error: 'Invalid credentials',
-          statusCode: 401
+          error: "Invalid credentials",
+          statusCode: 401,
         };
       }
 
@@ -148,8 +159,8 @@ class AuthService {
       if (!isValidSecret) {
         return {
           success: false,
-          error: 'Invalid credentials',
-          statusCode: 401
+          error: "Invalid credentials",
+          statusCode: 401,
         };
       }
 
@@ -157,8 +168,8 @@ class AuthService {
       if (!user.isRegistered) {
         return {
           success: false,
-          error: 'User not registered',
-          statusCode: 401
+          error: "User not registered",
+          statusCode: 401,
         };
       }
 
@@ -171,26 +182,29 @@ class AuthService {
 
       // Create response
       const response = {
-        token_type: 'Bearer',
+        token_type: "Bearer",
         access_token: token,
-        expires_in: expiresIn
+        expires_in: expiresIn,
       };
 
-      logger.info('User authenticated successfully', {
+      logger.info("User authenticated successfully", {
         email: user.email,
-        clientID: user.clientID
+        clientID: user.clientID,
       });
 
       return {
         success: true,
-        data: response
+        data: response,
       };
     } catch (error) {
-      logger.error('Failed to authenticate user', { error: error.message, data });
+      logger.error("Failed to authenticate user", {
+        error: error.message,
+        data,
+      });
       return {
         success: false,
-        error: 'Failed to authenticate user',
-        details: error.message
+        error: "Failed to authenticate user",
+        details: error.message,
       };
     }
   }
@@ -204,8 +218,8 @@ class AuthService {
       if (!user) {
         return {
           success: false,
-          error: 'User not found',
-          statusCode: 404
+          error: "User not found",
+          statusCode: 404,
         };
       }
 
@@ -219,19 +233,22 @@ class AuthService {
         clientID: user.clientID,
         isRegistered: user.isRegistered,
         lastLogin: user.lastLogin,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
       };
 
       return {
         success: true,
-        data: response
+        data: response,
       };
     } catch (error) {
-      logger.error('Failed to get user profile', { error: error.message, userId });
+      logger.error("Failed to get user profile", {
+        error: error.message,
+        userId,
+      });
       return {
         success: false,
-        error: 'Failed to get user profile',
-        details: error.message
+        error: "Failed to get user profile",
+        details: error.message,
       };
     }
   }
@@ -241,14 +258,14 @@ class AuthService {
    */
   async verifyTokenAndGetUser(token) {
     try {
-      const { verifyToken } = require('../utils/authUtils');
+      const { verifyToken } = require("../utils/authUtils");
       const decoded = verifyToken(token);
-      
+
       if (!decoded) {
         return {
           success: false,
-          error: 'Invalid token',
-          statusCode: 401
+          error: "Invalid token",
+          statusCode: 401,
         };
       }
 
@@ -257,21 +274,21 @@ class AuthService {
       if (!user) {
         return {
           success: false,
-          error: 'User not found',
-          statusCode: 401
+          error: "User not found",
+          statusCode: 401,
         };
       }
 
       return {
         success: true,
-        data: user
+        data: user,
       };
     } catch (error) {
-      logger.error('Failed to verify token', { error: error.message });
+      logger.error("Failed to verify token", { error: error.message });
       return {
         success: false,
-        error: 'Token verification failed',
-        details: error.message
+        error: "Token verification failed",
+        details: error.message,
       };
     }
   }
@@ -280,4 +297,4 @@ class AuthService {
 // Create singleton instance
 const authService = new AuthService();
 
-module.exports = authService; 
+module.exports = authService;

@@ -1,14 +1,14 @@
-/**
- * URL Service
- * Core business logic for URL shortening operations
- */
-
-const Url = require('../models/Url');
-const geoIpService = require('./geoIp');
-const shortcodeGenerator = require('../utils/shortcodeGenerator');
-const { validateUrlRequest, validateShortcode, sanitizeUrl, validateCustomShortcode } = require('../utils/validators');
-const { logger } = require('../middleware/logger');
-const config = require('../config/config');
+const Url = require("../models/Url");
+const geoIpService = require("./geoIp");
+const shortcodeGenerator = require("../utils/shortcodeGenerator");
+const {
+  validateUrlRequest,
+  validateShortcode,
+  sanitizeUrl,
+  validateCustomShortcode,
+} = require("../utils/validators");
+const { logger } = require("../middleware/logger");
+const config = require("../config/config");
 
 class UrlService {
   constructor() {
@@ -25,8 +25,8 @@ class UrlService {
       if (!validation.isValid) {
         return {
           success: false,
-          error: 'Validation failed',
-          details: validation.errors
+          error: "Validation failed",
+          details: validation.errors,
         };
       }
 
@@ -41,8 +41,8 @@ class UrlService {
         if (!shortcodeValidation.isValid) {
           return {
             success: false,
-            error: 'Invalid shortcode format',
-            details: shortcodeValidation.error
+            error: "Invalid shortcode format",
+            details: shortcodeValidation.error,
           };
         }
 
@@ -50,8 +50,8 @@ class UrlService {
         if (!availabilityCheck.isValid) {
           return {
             success: false,
-            error: 'Shortcode not available',
-            details: availabilityCheck.error
+            error: "Shortcode not available",
+            details: availabilityCheck.error,
           };
         }
 
@@ -67,7 +67,7 @@ class UrlService {
         originalUrl: sanitizedUrl,
         expiresAt: new Date(Date.now() + expiryMinutes * 60 * 1000),
         clickCount: 0,
-        clickEvents: []
+        clickEvents: [],
       });
 
       // Save to MongoDB
@@ -76,35 +76,38 @@ class UrlService {
       // Create response
       const response = {
         shortLink: urlDoc.shortLink,
-        expiry: urlDoc.expiresAt.toISOString()
+        expiry: urlDoc.expiresAt.toISOString(),
       };
 
-      logger.info('URL shortened successfully', {
+      logger.info("URL shortened successfully", {
         shortcode: finalShortcode,
         originalUrl: sanitizedUrl,
-        expiry: urlDoc.expiresAt
+        expiry: urlDoc.expiresAt,
       });
 
       return {
         success: true,
-        data: response
+        data: response,
       };
     } catch (error) {
-      logger.error('Failed to create short URL', { error: error.message, data });
-      
+      logger.error("Failed to create short URL", {
+        error: error.message,
+        data,
+      });
+
       // Handle duplicate key error
       if (error.code === 11000) {
         return {
           success: false,
-          error: 'Shortcode already exists',
-          details: 'Please try again or provide a different shortcode'
+          error: "Shortcode already exists",
+          details: "Please try again or provide a different shortcode",
         };
       }
 
       return {
         success: false,
-        error: 'Failed to create short URL',
-        details: error.message
+        error: "Failed to create short URL",
+        details: error.message,
       };
     }
   }
@@ -119,8 +122,8 @@ class UrlService {
       if (!shortcodeValidation.isValid) {
         return {
           success: false,
-          error: 'Invalid shortcode format',
-          details: shortcodeValidation.error
+          error: "Invalid shortcode format",
+          details: shortcodeValidation.error,
         };
       }
 
@@ -130,8 +133,8 @@ class UrlService {
       if (!urlDoc) {
         return {
           success: false,
-          error: 'URL not found',
-          statusCode: 404
+          error: "URL not found",
+          statusCode: 404,
         };
       }
 
@@ -139,8 +142,8 @@ class UrlService {
       if (urlDoc.isExpired) {
         return {
           success: false,
-          error: 'URL has expired',
-          statusCode: 410
+          error: "URL has expired",
+          statusCode: 410,
         };
       }
 
@@ -149,25 +152,28 @@ class UrlService {
         originalUrl: urlDoc.originalUrl,
         createdAt: urlDoc.createdAt.toISOString(),
         expiry: urlDoc.expiresAt.toISOString(),
-        clickEvents: urlDoc.clickEvents.map(event => ({
+        clickEvents: urlDoc.clickEvents.map((event) => ({
           timestamp: event.timestamp.toISOString(),
           referrer: event.referrer,
-          geoLocation: event.geoLocation
-        }))
+          geoLocation: event.geoLocation,
+        })),
       };
 
-      logger.info('URL stats retrieved', { shortcode: normalizedShortcode });
+      logger.info("URL stats retrieved", { shortcode: normalizedShortcode });
 
       return {
         success: true,
-        data: response
+        data: response,
       };
     } catch (error) {
-      logger.error('Failed to get URL stats', { shortcode, error: error.message });
+      logger.error("Failed to get URL stats", {
+        shortcode,
+        error: error.message,
+      });
       return {
         success: false,
-        error: 'Failed to get URL statistics',
-        details: error.message
+        error: "Failed to get URL statistics",
+        details: error.message,
       };
     }
   }
@@ -182,8 +188,8 @@ class UrlService {
       if (!shortcodeValidation.isValid) {
         return {
           success: false,
-          error: 'Invalid shortcode format',
-          statusCode: 400
+          error: "Invalid shortcode format",
+          statusCode: 400,
         };
       }
 
@@ -193,8 +199,8 @@ class UrlService {
       if (!urlDoc) {
         return {
           success: false,
-          error: 'URL not found',
-          statusCode: 404
+          error: "URL not found",
+          statusCode: 404,
         };
       }
 
@@ -202,8 +208,8 @@ class UrlService {
       if (urlDoc.isExpired) {
         return {
           success: false,
-          error: 'URL has expired',
-          statusCode: 410
+          error: "URL has expired",
+          statusCode: 410,
         };
       }
 
@@ -214,19 +220,19 @@ class UrlService {
       // Create click event
       const clickEvent = {
         timestamp: new Date(),
-        referrer: req.get('Referer') || 'Direct',
+        referrer: req.get("Referer") || "Direct",
         geoLocation,
-        userAgent: req.get('User-Agent')
+        userAgent: req.get("User-Agent"),
       };
 
       // Add click event to URL document
       await urlDoc.addClickEvent(clickEvent);
 
-      logger.info('URL redirect successful', {
+      logger.info("URL redirect successful", {
         shortcode: normalizedShortcode,
         originalUrl: urlDoc.originalUrl,
         clientIp,
-        clicks: urlDoc.clickCount
+        clicks: urlDoc.clickCount,
       });
 
       return {
@@ -236,16 +242,19 @@ class UrlService {
           clickEvent: {
             timestamp: clickEvent.timestamp.toISOString(),
             referrer: clickEvent.referrer,
-            geoLocation: clickEvent.geoLocation
-          }
-        }
+            geoLocation: clickEvent.geoLocation,
+          },
+        },
       };
     } catch (error) {
-      logger.error('Failed to redirect URL', { shortcode, error: error.message });
+      logger.error("Failed to redirect URL", {
+        shortcode,
+        error: error.message,
+      });
       return {
         success: false,
-        error: 'Failed to redirect to URL',
-        details: error.message
+        error: "Failed to redirect to URL",
+        details: error.message,
       };
     }
   }
@@ -260,7 +269,7 @@ class UrlService {
       if (!shortcodeValidation.isValid) {
         return {
           success: false,
-          error: 'Invalid shortcode format'
+          error: "Invalid shortcode format",
         };
       }
 
@@ -270,25 +279,27 @@ class UrlService {
       if (!urlDoc) {
         return {
           success: false,
-          error: 'URL not found'
+          error: "URL not found",
         };
       }
 
       // Deactivate the URL
       await urlDoc.deactivate();
 
-      logger.info('URL deleted successfully', { shortcode: normalizedShortcode });
+      logger.info("URL deleted successfully", {
+        shortcode: normalizedShortcode,
+      });
 
       return {
         success: true,
-        message: 'URL deleted successfully'
+        message: "URL deleted successfully",
       };
     } catch (error) {
-      logger.error('Failed to delete URL', { shortcode, error: error.message });
+      logger.error("Failed to delete URL", { shortcode, error: error.message });
       return {
         success: false,
-        error: 'Failed to delete URL',
-        details: error.message
+        error: "Failed to delete URL",
+        details: error.message,
       };
     }
   }
@@ -298,22 +309,22 @@ class UrlService {
    */
   async getHealthStatus() {
     try {
-      const mongoService = require('./mongoService');
+      const mongoService = require("./mongoService");
       const mongoHealth = await mongoService.healthCheck();
-      
+
       return {
-        status: mongoHealth.status === 'healthy' ? 'healthy' : 'unhealthy',
+        status: mongoHealth.status === "healthy" ? "healthy" : "unhealthy",
         timestamp: new Date().toISOString(),
         services: {
-          mongodb: mongoHealth
-        }
+          mongodb: mongoHealth,
+        },
       };
     } catch (error) {
-      logger.error('Health check failed', { error: error.message });
+      logger.error("Health check failed", { error: error.message });
       return {
-        status: 'unhealthy',
+        status: "unhealthy",
         timestamp: new Date().toISOString(),
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -337,7 +348,7 @@ class UrlService {
 
       return cleanedCount;
     } catch (error) {
-      logger.error('Failed to cleanup expired URLs', { error: error.message });
+      logger.error("Failed to cleanup expired URLs", { error: error.message });
       throw error;
     }
   }
@@ -346,4 +357,4 @@ class UrlService {
 // Create singleton instance
 const urlService = new UrlService();
 
-module.exports = urlService; 
+module.exports = urlService;
