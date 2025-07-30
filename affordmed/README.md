@@ -139,8 +139,8 @@ http://localhost:3000
     "name": "jayanthmurala",
     "rollNo": "aalbb",
     "accessCode": "qxRMwq",
-    "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da",
-    "clientSecret": "tVJaaaRBSEXCRXEM"
+    "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1",
+    "clientSecret": "0aV51VssKLaGh3zF"
   },
   "message": "You can register only once. Do not forget to save your clientID and retrieve them again."
 }
@@ -158,8 +158,8 @@ http://localhost:3000
   "name": "jayanthmurala",
   "rollNo": "aalbb",
   "accessCode": "qxRMwq",
-  "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da",
-  "clientSecret": "tVJaaaRBSEXCRXEM"
+  "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1",
+  "clientSecret": "0aV51VssKLaGh3zF"
 }
 ```
 
@@ -197,7 +197,7 @@ Authorization: Bearer <your-jwt-token>
       "email": "jayanthmurala@gamil.com",
       "name": "jayanthmurala",
       "rollNo": "aalbb",
-      "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da"
+      "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1"
     }
   }
 }
@@ -225,7 +225,7 @@ Authorization: Bearer <your-jwt-token>
     "githubUsername": "github",
     "rollNo": "aalbb",
     "accessCode": "qxRMwq",
-    "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da",
+    "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1",
     "isRegistered": true,
     "lastLogin": "2024-01-01T12:00:00.000Z",
     "createdAt": "2024-01-01T10:00:00.000Z"
