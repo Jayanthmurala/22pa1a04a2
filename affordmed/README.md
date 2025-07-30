@@ -384,40 +384,9 @@ Returns comprehensive API documentation with examples.
 
 ##  Architecture
 
-### Project Structure
 
-```
-src/
-├── config/
-│   └── config.js          # Application configuration
-├── controllers/
-│   ├── authController.js   # Authentication controllers
-│   └── urlController.js    # URL shortening controllers
-├── middleware/
-│   ├── authMiddleware.js   # Authentication middleware
-│   ├── logger.js          # Custom logging middleware
-│   └── errorHandler.js    # Error handling middleware
-├── models/
-│   ├── User.js            # User model for authentication
-│   └── Url.js             # MongoDB URL model
-├── routes/
-│   ├── authRoutes.js      # Authentication routes
-│   └── urlRoutes.js       # URL shortening routes
-├── services/
-│   ├── authService.js     # Authentication service
-│   ├── mongoService.js    # MongoDB service
-│   ├── geoIp.js           # Geolocation service
-│   └── urlService.js      # URL shortening service
-├── utils/
-│   ├── authUtils.js       # JWT utilities
-│   ├── authValidators.js  # Authentication validation
-│   ├── validators.js      # URL validation
-│   └── shortcodeGenerator.js # Shortcode generation
-└── server.js              # Main application entry point
 
-tests/
-└── urlService.test.js     # Test suite
-```
+
 
 ### Database Schema (MongoDB)
 
