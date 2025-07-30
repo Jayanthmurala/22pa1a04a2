@@ -65,10 +65,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Indexes for better query performance
-userSchema.index({ email: 1 });
-userSchema.index({ rollNo: 1 });
-userSchema.index({ clientID: 1 });
+
 
 // Pre-save middleware to hash client secret
 userSchema.pre("save", async function (next) {

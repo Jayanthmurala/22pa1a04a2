@@ -125,7 +125,7 @@ http://localhost:3000
   "mobileNo": "9999999999",
   "githubUsername": "github",
   "rollNo": "aalbb",
-  "accessCode": "xgAsNC"
+  "accessCode": "qxRMwq"
 }
 ```
 
@@ -138,7 +138,7 @@ http://localhost:3000
     "email": "jayanthmurala@gamil.com",
     "name": "jayanthmurala",
     "rollNo": "aalbb",
-    "accessCode": "xgAsNC",
+    "accessCode": "qxRMwq",
     "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da",
     "clientSecret": "tVJaaaRBSEXCRXEM"
   },
@@ -157,7 +157,7 @@ http://localhost:3000
   "email": "jayanthmurala@gamil.com",
   "name": "jayanthmurala",
   "rollNo": "aalbb",
-  "accessCode": "xgAsNC",
+  "accessCode": "qxRMwq",
   "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da",
   "clientSecret": "tVJaaaRBSEXCRXEM"
 }
@@ -224,7 +224,7 @@ Authorization: Bearer <your-jwt-token>
     "mobileNo": "9999999999",
     "githubUsername": "github",
     "rollNo": "aalbb",
-    "accessCode": "xgAsNC",
+    "accessCode": "qxRMwq",
     "clientID": "d9cbb699-6227-44a5-8d59-8b1befa816da",
     "isRegistered": true,
     "lastLogin": "2024-01-01T12:00:00.000Z",
@@ -249,7 +249,7 @@ Authorization: Bearer <your-jwt-token>
 
 ```json
 {
-  "url": "https://example.com/very-long-url",
+  "url": "https://example/very-long-url",
   "validity": 60,
   "shortcode": "my-custom-code"
 }
@@ -284,7 +284,7 @@ Authorization: Bearer <your-jwt-token>
   "success": true,
   "data": {
     "totalClicks": 5,
-    "originalUrl": "https://example.com/very-long-url",
+    "originalUrl": "https://exampl/very-long-url",
     "createdAt": "2024-01-01T11:00:00.000Z",
     "expiry": "2024-01-01T12:00:00.000Z",
     "clickEvents": [
@@ -382,7 +382,7 @@ Returns comprehensive API documentation with examples.
 - **Max Requests**: 100 per IP
 - **Message**: "Too many requests from this IP"
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Project Structure
 
@@ -531,7 +531,7 @@ CMD ["npm", "start"]
 NODE_ENV=production
 PORT=3000
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/url_shortener
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
-BASE_URL=https://your-domain.com
+JWT_SECRET=yourSuperSecret
+BASE_URL=https://your-domain
 LOG_LEVEL=warn
 ```

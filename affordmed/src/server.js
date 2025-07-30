@@ -23,9 +23,6 @@ class Server {
     this.host = config.server.host;
   }
 
-  /**
-   * Initialize middleware
-   */
   initializeMiddleware() {
     // Security middleware
     this.app.use(
@@ -74,6 +71,9 @@ class Server {
    */
   initializeRoutes() {
     // Health check endpoint
+    this.app.get("/", (req, res) => {
+      res.send("URL Shortener Microservice");
+    });
     this.app.get("/health", async (req, res) => {
       try {
         const healthStatus = await mongoService.healthCheck();
@@ -109,9 +109,7 @@ class Server {
     this.app.use(notFoundHandler);
   }
 
-  /**
-   * Initialize error handling
-   */
+ 
   initializeErrorHandling() {
     // Custom error handlers
     this.app.use(joiErrorHandler);
@@ -121,9 +119,7 @@ class Server {
     this.app.use(globalErrorHandler);
   }
 
-  /**
-   * Initialize database connections
-   */
+ 
   async initializeDatabase() {
     try {
       await mongoService.connect();
@@ -134,9 +130,7 @@ class Server {
     }
   }
 
-  /**
-   * Graceful shutdown handler
-   */
+  
   setupGracefulShutdown() {
     const gracefulShutdown = async (signal) => {
       logger.info(`Received ${signal}. Starting graceful shutdown...`);
@@ -185,9 +179,7 @@ class Server {
     });
   }
 
-  /**
-   * Start the server
-   */
+ 
   async start() {
     try {
       // Initialize database connections
@@ -236,9 +228,7 @@ class Server {
     }
   }
 
-  /**
-   * Stop the server
-   */
+ 
   async stop() {
     if (this.server) {
       return new Promise((resolve) => {

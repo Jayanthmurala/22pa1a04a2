@@ -3,7 +3,6 @@
  * Generates unique shortcodes for URL shortening
  */
 
-const { nanoid } = require('nanoid');
 const Url = require('../models/Url');
 const { logger } = require('../middleware/logger');
 const config = require('../config/config');
@@ -17,14 +16,16 @@ class ShortcodeGenerator {
   /**
    * Generate a random shortcode
    */
-  generate() {
+  async generate() {
+    const { nanoid } = await import('nanoid');
     return nanoid(this.length);
   }
 
   /**
    * Generate a custom shortcode with specific length
    */
-  generateCustom(length = this.length) {
+  async generateCustom(length = this.length) {
+    const { nanoid } = await import('nanoid');
     return nanoid(length);
   }
 
@@ -61,7 +62,7 @@ class ShortcodeGenerator {
       return this.generateTimestamp();
     } catch (error) {
       logger.error('Failed to generate sequential shortcode', { error: error.message });
-      return this.generate();
+      return await this.generate();
     }
   }
 
@@ -91,7 +92,7 @@ class ShortcodeGenerator {
    */
   async generateUnique(maxAttempts = 10) {
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      const shortcode = this.generate();
+      const shortcode = await this.generate();
       
       try {
         const exists = await Url.shortcodeExists(shortcode);

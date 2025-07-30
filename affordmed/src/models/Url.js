@@ -75,10 +75,7 @@ const urlSchema = new mongoose.Schema(
   }
 );
 
-// Indexes for better query performance
-urlSchema.index({ shortcode: 1 });
-urlSchema.index({ expiresAt: 1 });
-urlSchema.index({ isActive: 1 });
+
 urlSchema.index({ createdAt: -1 });
 
 // Virtual for checking if URL is expired

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("../config/config");
-const logger = require("../middleware/logger");
+const { logger } = require("../middleware/logger");
 
 class MongoService {
   constructor() {
