@@ -154,8 +154,8 @@ http://localhost:3000
 
 ```json
 {
-  "email": "jayanthmurala@gamil.com",
-  "name": "jayanthmurala",
+  "email": "jayanthmurala1@gamil.com",
+  "name": "Jayanthmurala",
   "rollNo": "aalbb",
   "accessCode": "qxRMwq",
   "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1",
@@ -167,12 +167,12 @@ http://localhost:3000
 
 ```json
 {
-  "success": true,
-  "data": {
-    "token_type": "Bearer",
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expires_in": 1743574344
-  }
+    "success": true,
+    "data": {
+        "token_type": "Bearer",
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpheWFudGhtdXJhbGExQGdhbWlsLmNvbSIsIm5hbWUiOiJKYXlhbnRobXVyYWxhIiwicm9sbE5vIjoiYWFsYmIiLCJhY2Nlc3NDb2RlIjoicXhSTXdxIiwiY2xpZW50SUQiOiIxNWNkYWYwYS1mYThkLTQ5NTEtYWU3Yy0zNjI0NTI0MDk3ZTEiLCJjbGllbnRTZWNyZXQiOiIkMmEkMTIkVzYyRGNmR21wcjNvc1FwbmlRQ1JvdS9EWXZuTEoxUUJMVldxektYUlRlcmlFWEp2cFpkaHEiLCJpYXQiOjE3NTM4NjEyMjEsImV4cCI6MTc1Mzk0NzYyMSwiYXVkIjoidXJsLXNob3J0ZW5lci1hcGkiLCJpc3MiOiJBZmZvcmRtZWQiLCJzdWIiOiJqYXlhbnRobXVyYWxhMUBnYW1pbC5jb20iLCJqdGkiOiIxNWNkYWYwYS1mYThkLTQ5NTEtYWU3Yy0zNjI0NTI0MDk3ZTEifQ.vchTCl987fZnpTy7OzqD4VDFtAmvQouzEokCtJJbpHA",
+        "expires_in": 1753947621
+    }
 }
 ```
 
@@ -190,16 +190,16 @@ Authorization: Bearer <your-jwt-token>
 
 ```json
 {
-  "success": true,
-  "data": {
-    "valid": true,
-    "user": {
-      "email": "jayanthmurala@gamil.com",
-      "name": "jayanthmurala",
-      "rollNo": "aalbb",
-      "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1"
+    "success": true,
+    "data": {
+        "valid": true,
+        "user": {
+            "email": "jayanthmurala1@gamil.com",
+            "name": "Jayanthmurala",
+            "rollNo": "aalbb",
+            "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1"
+        }
     }
-  }
 }
 ```
 
@@ -217,19 +217,19 @@ Authorization: Bearer <your-jwt-token>
 
 ```json
 {
-  "success": true,
-  "data": {
-    "email": "jayanthmurala@gamil.com",
-    "name": "jayanthmurala",
-    "mobileNo": "9999999999",
-    "githubUsername": "github",
-    "rollNo": "aalbb",
-    "accessCode": "qxRMwq",
-    "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1",
-    "isRegistered": true,
-    "lastLogin": "2024-01-01T12:00:00.000Z",
-    "createdAt": "2024-01-01T10:00:00.000Z"
-  }
+    "success": true,
+    "data": {
+        "email": "jayanthmurala1@gamil.com",
+        "name": "Jayanthmurala",
+        "mobileNo": "9999999999",
+        "githubUsername": "github",
+        "rollNo": "aalbb",
+        "accessCode": "qxRMwq",
+        "clientID": "15cdaf0a-fa8d-4951-ae7c-3624524097e1",
+        "isRegistered": true,
+        "lastLogin": "2025-07-30T07:40:21.718Z",
+        "createdAt": "2025-07-30T07:36:02.377Z"
+    }
 }
 ```
 
